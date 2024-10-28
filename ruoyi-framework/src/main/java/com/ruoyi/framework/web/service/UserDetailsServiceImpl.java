@@ -54,7 +54,7 @@ public class UserDetailsServiceImpl implements UserDetailsService
             throw new ServiceException(MessageUtils.message("user.blocked"));
         }
 
-        passwordService.validate(user);
+        //passwordService.validate(user);
 
         return createLoginUser(user);
     }

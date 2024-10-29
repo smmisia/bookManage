@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 图书管理Controller
  * 
  * @author ruoyi
- * @date 2024-10-28
+ * @date 2024-10-29
  */
 @RestController
 @RequestMapping("/system/book")
@@ -37,7 +37,6 @@ public class BookController extends BaseController
     /**
      * 查询图书管理列表
      */
-    @PreAuthorize("@ss.hasPermi('system:book:list')")
     @GetMapping("/list")
     public TableDataInfo list(Book book)
     {

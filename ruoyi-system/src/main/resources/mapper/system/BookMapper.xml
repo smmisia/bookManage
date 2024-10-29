@@ -7,30 +7,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Book" id="BookResult">
         <result property="id"    column="id"    />
         <result property="name"    column="name"    />
+        <result property="price"    column="price"    />
         <result property="author"    column="author"    />
         <result property="category"    column="category"    />
         <result property="content"    column="content"    />
         <result property="count"    column="count"    />
         <result property="image"    column="image"    />
         <result property="status"    column="status"    />
+        <result property="bargainPrice"    column="bargain_price"    />
+        <result property="recommended"    column="recommended"    />
         <result property="createTime"    column="create_time"    />
         <result property="createUser"    column="create_user"    />
     </resultMap>
 
     <sql id="selectBookVo">
-        select id, name, author, category, content, count, image, status, create_time, create_user from book
+        select id, name, price, author, category, content, count, image, status, bargain_price, recommended, create_time, create_user from book
     </sql>
 
     <select id="selectBookList" parameterType="Book" resultMap="BookResult">
         <include refid="selectBookVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
             <if test="author != null  and author != ''"> and author = #{author}</if>
             <if test="category != null  and category != ''"> and category = #{category}</if>
             <if test="content != null  and content != ''"> and content = #{content}</if>
             <if test="count != null "> and count = #{count}</if>
             <if test="image != null  and image != ''"> and image = #{image}</if>
             <if test="status != null "> and status = #{status}</if>
+            <if test="bargainPrice != null "> and bargain_price = #{bargainPrice}</if>
+            <if test="recommended != null "> and recommended = #{recommended}</if>
             <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
         </where>
     </select>
@@ -45,24 +51,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
             <if test="name != null">name,</if>
+            <if test="price != null">price,</if>
             <if test="author != null">author,</if>
             <if test="category != null">category,</if>
             <if test="content != null">content,</if>
             <if test="count != null">count,</if>
             <if test="image != null">image,</if>
             <if test="status != null">status,</if>
+            <if test="bargainPrice != null">bargain_price,</if>
+            <if test="recommended != null">recommended,</if>
             <if test="createTime != null">create_time,</if>
             <if test="createUser != null">create_user,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="name != null">#{name},</if>
+            <if test="price != null">#{price},</if>
             <if test="author != null">#{author},</if>
             <if test="category != null">#{category},</if>
             <if test="content != null">#{content},</if>
             <if test="count != null">#{count},</if>
             <if test="image != null">#{image},</if>
             <if test="status != null">#{status},</if>
+            <if test="bargainPrice != null">#{bargainPrice},</if>
+            <if test="recommended != null">#{recommended},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="createUser != null">#{createUser},</if>
          </trim>
@@ -72,12 +84,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update book
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null">name = #{name},</if>
+            <if test="price != null">price = #{price},</if>
             <if test="author != null">author = #{author},</if>
             <if test="category != null">category = #{category},</if>
             <if test="content != null">content = #{content},</if>
             <if test="count != null">count = #{count},</if>
             <if test="image != null">image = #{image},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="bargainPrice != null">bargain_price = #{bargainPrice},</if>
+            <if test="recommended != null">recommended = #{recommended},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="createUser != null">create_user = #{createUser},</if>
         </trim>

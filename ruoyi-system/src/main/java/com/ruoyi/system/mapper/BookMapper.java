@@ -7,7 +7,7 @@ import com.ruoyi.system.domain.Book;
  * 图书管理Mapper接口
  * 
  * @author ruoyi
- * @date 2024-10-28
+ * @date 2024-10-29
  */
 public interface BookMapper 
 {

@@ -12,7 +12,7 @@ import com.ruoyi.system.service.IBookService;
  * 图书管理Service业务层处理
  * 
  * @author ruoyi
- * @date 2024-10-28
+ * @date 2024-10-29
  */
 @Service
 public class BookServiceImpl implements IBookService 

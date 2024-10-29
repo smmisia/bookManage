@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 28/10/2024 22:04:36
+ Date: 29/10/2024 14:15:49
 */
 
 SET NAMES utf8mb4;
@@ -241,22 +241,46 @@ DROP TABLE IF EXISTS `book`;
 CREATE TABLE `book`  (
   `id` tinyint(1) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名称',
+  `price` int NULL DEFAULT NULL COMMENT '价格',
   `author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '作者',
   `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '分类',
   `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '内容',
   `count` int NULL DEFAULT NULL COMMENT '数量',
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '封面url',
   `status` tinyint(1) NULL DEFAULT NULL COMMENT '是否可售',
+  `bargain_price` tinyint(1) NULL DEFAULT NULL COMMENT '是否特价',
+  `recommended` tinyint(1) NULL DEFAULT NULL COMMENT '是否推荐',
   `create_time` datetime NULL DEFAULT NULL COMMENT '发布时间',
   `create_user` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '发布人',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '图书表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '图书表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of book
 -- ----------------------------
-INSERT INTO `book` VALUES (1, 'java', '余生军', 'java', 'java之父', 1, 'http://localhost/static/img/profile.473f5971.jpg', 0, '2024-10-28 21:07:40', 'admin');
-INSERT INTO `book` VALUES (2, 'c#', 'c#', 'C#', '.NET', 123, '/profile/upload/2024/10/28/-527daef72e39fac3_20241028213353A001.jpg', 0, '2024-10-28 21:34:15', 'ADMIN');
+INSERT INTO `book` VALUES (1, 'java', 111, '余生军', 'java', 'java之父', 1, 'http://localhost/static/img/profile.473f5971.jpg', 0, 0, 1, '2024-10-28 21:07:40', 'admin');
+INSERT INTO `book` VALUES (2, 'c#', 222, 'c#', 'C#', '.NET', 123, '/profile/upload/2024/10/28/-527daef72e39fac3_20241028213353A001.jpg', 0, 1, 0, '2024-10-28 21:34:15', 'ADMIN');
+INSERT INTO `book` VALUES (3, 'springboot', 333, '余生军', 'java', 'jjjjjjj', 1, '/profile/upload/2024/10/29/63ECB77BEFF9FAD6CED50E895B2BC92A_20241029100758A001.jpg', 0, 0, 0, '2024-10-29 10:08:04', 'admin');
+
+-- ----------------------------
+-- Table structure for book_review
+-- ----------------------------
+DROP TABLE IF EXISTS `book_review`;
+CREATE TABLE `book_review`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` int NULL DEFAULT NULL COMMENT '用户id',
+  `book_id` int NULL DEFAULT NULL COMMENT '图书id',
+  `review` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '评论',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of book_review
+-- ----------------------------
+INSERT INTO `book_review` VALUES (1, 1, 1, '太唐了');
+INSERT INTO `book_review` VALUES (12, 1, 3, '666');
+INSERT INTO `book_review` VALUES (13, 100, 1, '123');
+INSERT INTO `book_review` VALUES (14, 100, 1, '66');
 
 -- ----------------------------
 -- Table structure for gen_table
@@ -285,12 +309,14 @@ CREATE TABLE `gen_table`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`table_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '代码生成业务表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '代码生成业务表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gen_table
 -- ----------------------------
-INSERT INTO `gen_table` VALUES (1, 'book', '图书表', NULL, NULL, 'Book', 'crud', 'element-ui', 'com.ruoyi.system', 'system', 'book', '图书管理', 'ruoyi', '0', '/', '{\"parentMenuId\":1}', 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46', NULL);
+INSERT INTO `gen_table` VALUES (1, 'book', '图书表', NULL, NULL, 'Book', 'crud', 'element-ui', 'com.ruoyi.system', 'system', 'book', '图书管理', 'ruoyi', '0', '/', '{\"parentMenuId\":1}', 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29', NULL);
+INSERT INTO `gen_table` VALUES (2, 'book_review', '图书评论表', NULL, NULL, 'BookReview', 'crud', 'element-ui', 'com.ruoyi.system', 'system', 'review', '图书评论管理', 'ruoyi', '0', '/', '{\"parentMenuId\":1}', 'admin', '2024-10-29 11:59:26', '', '2024-10-29 12:00:55', NULL);
+INSERT INTO `gen_table` VALUES (3, 'order', '订单信息表', NULL, NULL, 'Order', 'crud', 'element-ui', 'com.ruoyi.system', 'system', 'order', '订单信息', 'ruoyi', '0', '/', '{\"parentMenuId\":1}', 'admin', '2024-10-29 13:20:42', '', '2024-10-29 13:22:11', NULL);
 
 -- ----------------------------
 -- Table structure for gen_table_column
@@ -320,21 +346,54 @@ CREATE TABLE `gen_table_column`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`column_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '代码生成业务表字段' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '代码生成业务表字段' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gen_table_column
 -- ----------------------------
-INSERT INTO `gen_table_column` VALUES (1, 1, 'id', '主键', 'tinyint(1)', 'Integer', 'id', '1', '0', '0', '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (2, 1, 'name', '名称', 'varchar(255)', 'String', 'name', '0', '0', '0', '1', '1', '1', '1', 'LIKE', 'input', '', 2, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (3, 1, 'author', '作者', 'varchar(255)', 'String', 'author', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 3, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (4, 1, 'category', '分类', 'varchar(255)', 'String', 'category', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 4, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (5, 1, 'content', '内容', 'varchar(255)', 'String', 'content', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'editor', '', 5, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (6, 1, 'count', '数量', 'int', 'Integer', 'count', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 6, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (7, 1, 'image', '封面url', 'varchar(255)', 'String', 'image', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'imageUpload', '', 7, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (8, 1, 'status', '是否可售', 'tinyint(1)', 'Integer', 'status', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'radio', '', 8, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (9, 1, 'create_time', '发布时间', 'datetime', 'Date', 'createTime', '0', '0', '0', '1', NULL, NULL, NULL, 'EQ', 'datetime', '', 9, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
-INSERT INTO `gen_table_column` VALUES (10, 1, 'create_user', '发布人', 'varchar(255)', 'String', 'createUser', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 10, 'admin', '2024-10-28 20:34:50', '', '2024-10-28 21:27:46');
+INSERT INTO `gen_table_column` VALUES (1, 1, 'id', '主键', 'tinyint(1)', 'Integer', 'id', '1', '0', '0', '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (2, 1, 'name', '名称', 'varchar(255)', 'String', 'name', '0', '0', '0', '1', '1', '1', '1', 'LIKE', 'input', '', 2, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (3, 1, 'author', '作者', 'varchar(255)', 'String', 'author', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 4, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (4, 1, 'category', '分类', 'varchar(255)', 'String', 'category', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 5, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (5, 1, 'content', '内容', 'varchar(255)', 'String', 'content', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'editor', '', 6, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (6, 1, 'count', '数量', 'int', 'Long', 'count', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 7, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (7, 1, 'image', '封面url', 'varchar(255)', 'String', 'image', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'imageUpload', '', 8, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (8, 1, 'status', '是否可售', 'tinyint(1)', 'Integer', 'status', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'checkbox', 'sys_show_hide', 9, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (9, 1, 'create_time', '发布时间', 'datetime', 'Date', 'createTime', '0', '0', '0', '1', NULL, NULL, NULL, 'EQ', 'datetime', '', 12, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (10, 1, 'create_user', '发布人', 'varchar(255)', 'String', 'createUser', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 13, 'admin', '2024-10-28 20:34:50', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (11, 1, 'price', '价格', 'int', 'Long', 'price', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 3, '', '2024-10-29 10:24:43', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (12, 1, 'bargain_price', '是否特价', 'tinyint(1)', 'Integer', 'bargainPrice', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'radio', 'sys_normal_disable', 10, '', '2024-10-29 10:24:43', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (13, 1, 'recommended', '是否推荐', 'tinyint(1)', 'Integer', 'recommended', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'radio', 'sys_normal_disable', 11, '', '2024-10-29 10:24:43', '', '2024-10-29 10:25:29');
+INSERT INTO `gen_table_column` VALUES (14, 2, 'id', '主键', 'int', 'Long', 'id', '1', '1', '0', '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2024-10-29 11:59:26', '', '2024-10-29 12:00:55');
+INSERT INTO `gen_table_column` VALUES (15, 2, 'user_id', '用户id', 'int', 'Long', 'userId', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 2, 'admin', '2024-10-29 11:59:26', '', '2024-10-29 12:00:55');
+INSERT INTO `gen_table_column` VALUES (16, 2, 'book_id', '图书id', 'int', 'Long', 'bookId', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 3, 'admin', '2024-10-29 11:59:26', '', '2024-10-29 12:00:55');
+INSERT INTO `gen_table_column` VALUES (17, 2, 'review', '评论', 'varchar(255)', 'String', 'review', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 4, 'admin', '2024-10-29 11:59:26', '', '2024-10-29 12:00:55');
+INSERT INTO `gen_table_column` VALUES (18, 3, 'id', '订单id', 'int', 'Long', 'id', '1', '0', '0', '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2024-10-29 13:20:42', '', '2024-10-29 13:22:11');
+INSERT INTO `gen_table_column` VALUES (19, 3, 'user_id', '用户id', 'int', 'Long', 'userId', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 2, 'admin', '2024-10-29 13:20:42', '', '2024-10-29 13:22:11');
+INSERT INTO `gen_table_column` VALUES (20, 3, 'total_price', '总价格', 'int', 'Long', 'totalPrice', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'input', '', 3, 'admin', '2024-10-29 13:20:42', '', '2024-10-29 13:22:11');
+INSERT INTO `gen_table_column` VALUES (21, 3, 'delivery_date', '用户希望的送货时间', 'datetime', 'Date', 'deliveryDate', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'datetime', '', 4, 'admin', '2024-10-29 13:20:42', '', '2024-10-29 13:22:11');
+INSERT INTO `gen_table_column` VALUES (22, 3, 'order_status', '订单状态,0未支付,1取消，2完成', 'int', 'Long', 'orderStatus', '0', '0', '0', '1', '1', '1', '1', 'EQ', 'radio', '', 5, 'admin', '2024-10-29 13:20:42', '', '2024-10-29 13:22:11');
+INSERT INTO `gen_table_column` VALUES (23, 3, 'items', '订单中的商品信息', 'json', 'String', 'items', '0', '0', '0', '1', '1', '1', '1', 'EQ', NULL, '', 6, 'admin', '2024-10-29 13:20:42', '', '2024-10-29 13:22:11');
+
+-- ----------------------------
+-- Table structure for order
+-- ----------------------------
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '订单id',
+  `user_id` int NULL DEFAULT NULL COMMENT '用户id',
+  `total_price` int NULL DEFAULT NULL COMMENT '总价格',
+  `delivery_date` datetime NULL DEFAULT NULL COMMENT '用户希望的送货时间',
+  `order_status` int NULL DEFAULT NULL COMMENT '订单状态,0未支付,1取消，2完成',
+  `items` json NULL COMMENT '订单中的商品信息',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of order
+-- ----------------------------
+INSERT INTO `order` VALUES (1, 1, 166, '2024-10-29 13:19:32', 0, '[{\"name\": \"书名1\", \"price\": 29.99, \"book_id\": 1, \"quantity\": 2}, {\"name\": \"书名2\", \"price\": 19.99, \"book_id\": 2, \"quantity\": 1}]');
+INSERT INTO `order` VALUES (2, 100, 666, '2024-10-09 00:00:00', 0, '[{\"id\": 3, \"name\": \"springboot\", \"price\": 333, \"quantity\": 1}, {\"id\": 1, \"name\": \"java\", \"price\": 111, \"quantity\": 3}]');
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -552,7 +611,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 129 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 148 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -586,6 +645,25 @@ INSERT INTO `sys_logininfor` VALUES (125, 'common', '127.0.0.1', '内网IP', 'Ch
 INSERT INTO `sys_logininfor` VALUES (126, 'common', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-28 22:03:49');
 INSERT INTO `sys_logininfor` VALUES (127, 'common', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-28 22:04:03');
 INSERT INTO `sys_logininfor` VALUES (128, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-28 22:04:12');
+INSERT INTO `sys_logininfor` VALUES (129, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 09:11:10');
+INSERT INTO `sys_logininfor` VALUES (130, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-29 11:09:43');
+INSERT INTO `sys_logininfor` VALUES (131, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 11:09:48');
+INSERT INTO `sys_logininfor` VALUES (132, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-29 11:31:01');
+INSERT INTO `sys_logininfor` VALUES (133, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 11:31:09');
+INSERT INTO `sys_logininfor` VALUES (134, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-29 13:36:53');
+INSERT INTO `sys_logininfor` VALUES (135, 'common', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 13:37:03');
+INSERT INTO `sys_logininfor` VALUES (136, 'common', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-29 13:37:26');
+INSERT INTO `sys_logininfor` VALUES (137, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '1', '用户不存在/密码错误', '2024-10-29 13:37:36');
+INSERT INTO `sys_logininfor` VALUES (138, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 13:37:45');
+INSERT INTO `sys_logininfor` VALUES (139, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-29 13:39:51');
+INSERT INTO `sys_logininfor` VALUES (140, 'common', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 13:40:00');
+INSERT INTO `sys_logininfor` VALUES (141, 'common', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-29 13:40:40');
+INSERT INTO `sys_logininfor` VALUES (142, 'common', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 14:01:35');
+INSERT INTO `sys_logininfor` VALUES (143, 'common', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-29 14:08:12');
+INSERT INTO `sys_logininfor` VALUES (144, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 14:08:24');
+INSERT INTO `sys_logininfor` VALUES (145, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '退出成功', '2024-10-29 14:10:57');
+INSERT INTO `sys_logininfor` VALUES (146, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '1', '验证码错误', '2024-10-29 14:11:01');
+INSERT INTO `sys_logininfor` VALUES (147, 'admin', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '0', '登录成功', '2024-10-29 14:11:03');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -613,7 +691,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2007 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2019 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -709,6 +787,18 @@ INSERT INTO `sys_menu` VALUES (2003, '图书管理新增', 2001, 2, '#', '', NUL
 INSERT INTO `sys_menu` VALUES (2004, '图书管理修改', 2001, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:book:edit', '#', 'admin', '2024-10-28 21:12:33', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2005, '图书管理删除', 2001, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:book:remove', '#', 'admin', '2024-10-28 21:12:33', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2006, '图书管理导出', 2001, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:book:export', '#', 'admin', '2024-10-28 21:12:33', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2007, '图书评论管理', 1, 1, 'review', 'system/review/index', NULL, '', 1, 0, 'C', '1', '0', 'system:review:list', '#', 'admin', '2024-10-29 12:02:10', 'admin', '2024-10-29 13:24:20', '图书评论管理菜单');
+INSERT INTO `sys_menu` VALUES (2008, '图书评论管理查询', 2007, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:review:query', '#', 'admin', '2024-10-29 12:02:10', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2009, '图书评论管理新增', 2007, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:review:add', '#', 'admin', '2024-10-29 12:02:10', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2010, '图书评论管理修改', 2007, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:review:edit', '#', 'admin', '2024-10-29 12:02:10', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2011, '图书评论管理删除', 2007, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:review:remove', '#', 'admin', '2024-10-29 12:02:10', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2012, '图书评论管理导出', 2007, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:review:export', '#', 'admin', '2024-10-29 12:02:10', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2013, '订单信息', 1, 1, 'order', 'system/order/index', NULL, '', 1, 0, 'C', '0', '0', 'system:order:list', 'theme', 'admin', '2024-10-29 13:22:57', 'admin', '2024-10-29 13:35:25', '订单信息菜单');
+INSERT INTO `sys_menu` VALUES (2014, '订单信息查询', 2013, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:order:query', '#', 'admin', '2024-10-29 13:22:57', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2015, '订单信息新增', 2013, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:order:add', '#', 'admin', '2024-10-29 13:22:57', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2016, '订单信息修改', 2013, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:order:edit', '#', 'admin', '2024-10-29 13:22:57', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2017, '订单信息删除', 2013, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:order:remove', '#', 'admin', '2024-10-29 13:22:57', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2018, '订单信息导出', 2013, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'system:order:export', '#', 'admin', '2024-10-29 13:22:57', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -760,7 +850,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status` ASC) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 128 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 212 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -793,6 +883,90 @@ INSERT INTO `sys_oper_log` VALUES (124, '代码生成', 8, 'com.ruoyi.generator.
 INSERT INTO `sys_oper_log` VALUES (125, '图书管理', 1, 'com.ruoyi.web.controller.system.BookController.add()', 'POST', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"author\":\"c#\",\"category\":\"C#\",\"content\":\".NET\",\"count\":123,\"createTime\":\"2024-10-28 21:33:58\",\"createUser\":\"ADMIN\",\"image\":\"/profile/upload/2024/10/28/-527daef72e39fac3_20241028213353A001.jpg\",\"name\":\"c#\",\"params\":{}}', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLException: Field \'id\' doesn\'t have a default value\r\n### The error may exist in file [E:\\RuoYi-Vue\\ruoyi-system\\target\\classes\\mapper\\system\\BookMapper.xml]\r\n### The error may involve com.ruoyi.system.mapper.BookMapper.insertBook-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into book          ( name,             author,             category,             content,             count,             image,                          create_time,             create_user )           values ( ?,             ?,             ?,             ?,             ?,             ?,                          ?,             ? )\r\n### Cause: java.sql.SQLException: Field \'id\' doesn\'t have a default value\n; Field \'id\' doesn\'t have a default value; nested exception is java.sql.SQLException: Field \'id\' doesn\'t have a default value', '2024-10-28 21:34:31', 269);
 INSERT INTO `sys_oper_log` VALUES (126, '图书管理', 1, 'com.ruoyi.web.controller.system.BookController.add()', 'POST', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"author\":\"c#\",\"category\":\"C#\",\"content\":\".NET\",\"count\":123,\"createTime\":\"2024-10-28 21:34:14\",\"createUser\":\"ADMIN\",\"image\":\"/profile/upload/2024/10/28/-527daef72e39fac3_20241028213353A001.jpg\",\"name\":\"c#\",\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-28 21:34:47', 11);
 INSERT INTO `sys_oper_log` VALUES (127, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"deptId\":100,\"email\":\"21111@qq.com\",\"nickName\":\"common\",\"params\":{},\"phonenumber\":\"18200000000\",\"postIds\":[4],\"roleIds\":[2],\"sex\":\"0\",\"status\":\"0\",\"userId\":100,\"userName\":\"测试\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-28 22:03:08', 188);
+INSERT INTO `sys_oper_log` VALUES (128, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.editSave()', 'PUT', 1, 'admin', '研发部门', '/tool/gen', '127.0.0.1', '内网IP', '{\"businessName\":\"book\",\"className\":\"Book\",\"columns\":[{\"capJavaField\":\"Id\",\"columnComment\":\"主键\",\"columnId\":1,\"columnName\":\"id\",\"columnType\":\"tinyint(1)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":false,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isPk\":\"1\",\"isRequired\":\"0\",\"javaField\":\"id\",\"javaType\":\"Integer\",\"list\":false,\"params\":{},\"pk\":true,\"query\":false,\"queryType\":\"EQ\",\"required\":false,\"sort\":1,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-28 21:27:46\",\"usableColumn\":false},{\"capJavaField\":\"Name\",\"columnComment\":\"名称\",\"columnId\":2,\"columnName\":\"name\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"name\",\"javaType\":\"String\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"LIKE\",\"required\":false,\"sort\":2,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-28 21:27:46\",\"usableColumn\":false},{\"capJavaField\":\"Author\",\"columnComment\":\"作者\",\"columnId\":3,\"columnName\":\"author\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"author\",\"javaType\":\"String\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"EQ\",\"required\":false,\"sort\":3,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-28 21:27:46\",\"usableColumn\":false},{\"capJavaField\":\"Category\",\"columnComment\":\"分类\",\"columnId\":4,\"columnName\":\"category\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\"', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 09:32:03', 109);
+INSERT INTO `sys_oper_log` VALUES (129, '代码生成', 8, 'com.ruoyi.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '127.0.0.1', '内网IP', '{\"tables\":\"book\"}', NULL, 0, NULL, '2024-10-29 09:32:17', 78);
+INSERT INTO `sys_oper_log` VALUES (130, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.editSave()', 'PUT', 1, 'admin', '研发部门', '/tool/gen', '127.0.0.1', '内网IP', '{\"businessName\":\"book\",\"className\":\"Book\",\"columns\":[{\"capJavaField\":\"Id\",\"columnComment\":\"主键\",\"columnId\":1,\"columnName\":\"id\",\"columnType\":\"tinyint(1)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":false,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isPk\":\"1\",\"isRequired\":\"0\",\"javaField\":\"id\",\"javaType\":\"Integer\",\"list\":false,\"params\":{},\"pk\":true,\"query\":false,\"queryType\":\"EQ\",\"required\":false,\"sort\":1,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-29 09:32:02\",\"usableColumn\":false},{\"capJavaField\":\"Name\",\"columnComment\":\"名称\",\"columnId\":2,\"columnName\":\"name\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"name\",\"javaType\":\"String\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"LIKE\",\"required\":false,\"sort\":2,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-29 09:32:02\",\"usableColumn\":false},{\"capJavaField\":\"Author\",\"columnComment\":\"作者\",\"columnId\":3,\"columnName\":\"author\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"author\",\"javaType\":\"String\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"EQ\",\"required\":false,\"sort\":3,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-29 09:32:02\",\"usableColumn\":false},{\"capJavaField\":\"Category\",\"columnComment\":\"分类\",\"columnId\":4,\"columnName\":\"category\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\"', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 09:34:29', 58);
+INSERT INTO `sys_oper_log` VALUES (131, '代码生成', 8, 'com.ruoyi.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '127.0.0.1', '内网IP', '{\"tables\":\"book\"}', NULL, 0, NULL, '2024-10-29 09:34:35', 57);
+INSERT INTO `sys_oper_log` VALUES (132, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.editSave()', 'PUT', 1, 'admin', '研发部门', '/tool/gen', '127.0.0.1', '内网IP', '{\"businessName\":\"book\",\"className\":\"Book\",\"columns\":[{\"capJavaField\":\"Id\",\"columnComment\":\"主键\",\"columnId\":1,\"columnName\":\"id\",\"columnType\":\"tinyint(1)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":false,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isPk\":\"1\",\"isRequired\":\"0\",\"javaField\":\"id\",\"javaType\":\"Integer\",\"list\":false,\"params\":{},\"pk\":true,\"query\":false,\"queryType\":\"EQ\",\"required\":false,\"sort\":1,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-29 09:34:29\",\"usableColumn\":false},{\"capJavaField\":\"Name\",\"columnComment\":\"名称\",\"columnId\":2,\"columnName\":\"name\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"name\",\"javaType\":\"String\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"LIKE\",\"required\":false,\"sort\":2,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-29 09:34:29\",\"usableColumn\":false},{\"capJavaField\":\"Author\",\"columnComment\":\"作者\",\"columnId\":3,\"columnName\":\"author\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"author\",\"javaType\":\"String\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"EQ\",\"required\":false,\"sort\":3,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-29 09:34:29\",\"usableColumn\":false},{\"capJavaField\":\"Category\",\"columnComment\":\"分类\",\"columnId\":4,\"columnName\":\"category\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\"', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 09:37:48', 49);
+INSERT INTO `sys_oper_log` VALUES (133, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:06:55', 27);
+INSERT INTO `sys_oper_log` VALUES (134, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:06:59', 6);
+INSERT INTO `sys_oper_log` VALUES (135, '图书管理', 1, 'com.ruoyi.web.controller.system.BookController.add()', 'POST', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"author\":\"余生军\",\"category\":\"java\",\"content\":\"jjjjjjj\",\"count\":1,\"createTime\":\"2024-10-29 10:08:04\",\"createUser\":\"admin\",\"image\":\"/profile/upload/2024/10/29/63ECB77BEFF9FAD6CED50E895B2BC92A_20241029100758A001.jpg\",\"name\":\"springboot\",\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:08:38', 9);
+INSERT INTO `sys_oper_log` VALUES (136, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', '研发部门', '/system/user', '127.0.0.1', '内网IP', '{\"admin\":false,\"createBy\":\"admin\",\"email\":\"21@qq.com\",\"nickName\":\"java\",\"params\":{},\"phonenumber\":\"19211111111\",\"postIds\":[],\"roleIds\":[2],\"sex\":\"0\",\"status\":\"0\",\"userId\":101,\"userName\":\"测试\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:17:41', 163);
+INSERT INTO `sys_oper_log` VALUES (137, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.synchDb()', 'GET', 1, 'admin', '研发部门', '/tool/gen/synchDb/book', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:24:43', 76);
+INSERT INTO `sys_oper_log` VALUES (138, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.editSave()', 'PUT', 1, 'admin', '研发部门', '/tool/gen', '127.0.0.1', '内网IP', '{\"businessName\":\"book\",\"className\":\"Book\",\"columns\":[{\"capJavaField\":\"Id\",\"columnComment\":\"主键\",\"columnId\":1,\"columnName\":\"id\",\"columnType\":\"tinyint(1)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":false,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isPk\":\"1\",\"isRequired\":\"0\",\"javaField\":\"id\",\"javaType\":\"Integer\",\"list\":false,\"params\":{},\"pk\":true,\"query\":false,\"queryType\":\"EQ\",\"required\":false,\"sort\":1,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-29 10:24:43\",\"usableColumn\":false},{\"capJavaField\":\"Name\",\"columnComment\":\"名称\",\"columnId\":2,\"columnName\":\"name\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"name\",\"javaType\":\"String\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"LIKE\",\"required\":false,\"sort\":2,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"updateTime\":\"2024-10-29 10:24:43\",\"usableColumn\":false},{\"capJavaField\":\"Price\",\"columnComment\":\"价格\",\"columnId\":11,\"columnName\":\"price\",\"columnType\":\"int\",\"createBy\":\"\",\"createTime\":\"2024-10-29 10:24:43\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"price\",\"javaType\":\"Long\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"EQ\",\"required\":false,\"sort\":3,\"superColumn\":false,\"tableId\":1,\"updateBy\":\"\",\"usableColumn\":false},{\"capJavaField\":\"Author\",\"columnComment\":\"作者\",\"columnId\":3,\"columnName\":\"author\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-28 20:34:50\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"is', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:25:29', 66);
+INSERT INTO `sys_oper_log` VALUES (139, '代码生成', 8, 'com.ruoyi.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '127.0.0.1', '内网IP', '{\"tables\":\"book\"}', NULL, 0, NULL, '2024-10-29 10:25:33', 52);
+INSERT INTO `sys_oper_log` VALUES (140, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:32:10', 41);
+INSERT INTO `sys_oper_log` VALUES (141, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:32:11', 7);
+INSERT INTO `sys_oper_log` VALUES (142, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:33:21', 5);
+INSERT INTO `sys_oper_log` VALUES (143, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:33:47', 5);
+INSERT INTO `sys_oper_log` VALUES (144, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:34:12', 5);
+INSERT INTO `sys_oper_log` VALUES (145, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:34:36', 8);
+INSERT INTO `sys_oper_log` VALUES (146, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:34:40', 8);
+INSERT INTO `sys_oper_log` VALUES (147, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:36:17', 5);
+INSERT INTO `sys_oper_log` VALUES (148, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:36:26', 5);
+INSERT INTO `sys_oper_log` VALUES (149, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:37:03', 6);
+INSERT INTO `sys_oper_log` VALUES (150, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:37:10', 6);
+INSERT INTO `sys_oper_log` VALUES (151, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:37:13', 12);
+INSERT INTO `sys_oper_log` VALUES (152, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:37:45', 8);
+INSERT INTO `sys_oper_log` VALUES (153, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:37:46', 7);
+INSERT INTO `sys_oper_log` VALUES (154, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:38:11', 8);
+INSERT INTO `sys_oper_log` VALUES (155, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":1,\"id\":1,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:38:12', 8);
+INSERT INTO `sys_oper_log` VALUES (156, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":0,\"id\":1,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:38:18', 7);
+INSERT INTO `sys_oper_log` VALUES (157, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":1,\"id\":1,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 10:41:57', 9);
+INSERT INTO `sys_oper_log` VALUES (158, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":1,\"id\":2,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:18:06', 8);
+INSERT INTO `sys_oper_log` VALUES (159, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"recommended\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:18:12', 6);
+INSERT INTO `sys_oper_log` VALUES (160, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"recommended\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:18:13', 6);
+INSERT INTO `sys_oper_log` VALUES (161, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":0,\"id\":1,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:18:13', 7);
+INSERT INTO `sys_oper_log` VALUES (162, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":0,\"id\":2,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:18:14', 6);
+INSERT INTO `sys_oper_log` VALUES (163, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"recommended\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:18:14', 8);
+INSERT INTO `sys_oper_log` VALUES (164, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":1,\"id\":1,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:18:49', 6);
+INSERT INTO `sys_oper_log` VALUES (165, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":3,\"params\":{},\"recommended\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:20:49', 8);
+INSERT INTO `sys_oper_log` VALUES (166, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":1,\"id\":2,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:23:32', 10);
+INSERT INTO `sys_oper_log` VALUES (167, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":2,\"params\":{},\"recommended\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:23:33', 6);
+INSERT INTO `sys_oper_log` VALUES (168, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":0,\"id\":2,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:30', 7);
+INSERT INTO `sys_oper_log` VALUES (169, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":2,\"params\":{},\"recommended\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:36', 7);
+INSERT INTO `sys_oper_log` VALUES (170, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":3,\"params\":{},\"recommended\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:36', 7);
+INSERT INTO `sys_oper_log` VALUES (171, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":0,\"id\":1,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:37', 6);
+INSERT INTO `sys_oper_log` VALUES (172, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":1,\"params\":{},\"recommended\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:40', 7);
+INSERT INTO `sys_oper_log` VALUES (173, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":1,\"id\":2,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:41', 6);
+INSERT INTO `sys_oper_log` VALUES (174, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":1,\"id\":3,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:47', 7);
+INSERT INTO `sys_oper_log` VALUES (175, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":3,\"params\":{},\"recommended\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:48', 6);
+INSERT INTO `sys_oper_log` VALUES (176, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":0,\"id\":3,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:52', 9);
+INSERT INTO `sys_oper_log` VALUES (177, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":3,\"params\":{},\"recommended\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:25:53', 7);
+INSERT INTO `sys_oper_log` VALUES (178, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":1,\"id\":3,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:26:43', 7);
+INSERT INTO `sys_oper_log` VALUES (179, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":3,\"params\":{},\"recommended\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:26:44', 11);
+INSERT INTO `sys_oper_log` VALUES (180, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"bargainPrice\":0,\"id\":3,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:26:48', 7);
+INSERT INTO `sys_oper_log` VALUES (181, '图书管理', 2, 'com.ruoyi.web.controller.system.BookController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/book', '127.0.0.1', '内网IP', '{\"id\":3,\"params\":{},\"recommended\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:26:49', 7);
+INSERT INTO `sys_oper_log` VALUES (182, '代码生成', 6, 'com.ruoyi.generator.controller.GenController.importTableSave()', 'POST', 1, 'admin', '研发部门', '/tool/gen/importTable', '127.0.0.1', '内网IP', '{\"tables\":\"book_review\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 11:59:27', 71);
+INSERT INTO `sys_oper_log` VALUES (183, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.editSave()', 'PUT', 1, 'admin', '研发部门', '/tool/gen', '127.0.0.1', '内网IP', '{\"businessName\":\"review\",\"className\":\"BookReview\",\"columns\":[{\"capJavaField\":\"Id\",\"columnComment\":\"主键\",\"columnId\":14,\"columnName\":\"id\",\"columnType\":\"int\",\"createBy\":\"admin\",\"createTime\":\"2024-10-29 11:59:26\",\"dictType\":\"\",\"edit\":false,\"htmlType\":\"input\",\"increment\":true,\"insert\":true,\"isIncrement\":\"1\",\"isInsert\":\"1\",\"isPk\":\"1\",\"isRequired\":\"0\",\"javaField\":\"id\",\"javaType\":\"Long\",\"list\":false,\"params\":{},\"pk\":true,\"query\":false,\"queryType\":\"EQ\",\"required\":false,\"sort\":1,\"superColumn\":false,\"tableId\":2,\"updateBy\":\"\",\"usableColumn\":false},{\"capJavaField\":\"UserId\",\"columnComment\":\"用户id\",\"columnId\":15,\"columnName\":\"user_id\",\"columnType\":\"int\",\"createBy\":\"admin\",\"createTime\":\"2024-10-29 11:59:26\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"userId\",\"javaType\":\"Long\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"EQ\",\"required\":false,\"sort\":2,\"superColumn\":false,\"tableId\":2,\"updateBy\":\"\",\"usableColumn\":false},{\"capJavaField\":\"BookId\",\"columnComment\":\"图书id\",\"columnId\":16,\"columnName\":\"book_id\",\"columnType\":\"int\",\"createBy\":\"admin\",\"createTime\":\"2024-10-29 11:59:26\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"bookId\",\"javaType\":\"Long\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"EQ\",\"required\":false,\"sort\":3,\"superColumn\":false,\"tableId\":2,\"updateBy\":\"\",\"usableColumn\":false},{\"capJavaField\":\"Review\",\"columnComment\":\"评论\",\"columnId\":17,\"columnName\":\"review\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"createTime\":\"2024-10-29 11:59:26\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"review\",\"javaType\":\"String\",\"list\":t', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:00:55', 51);
+INSERT INTO `sys_oper_log` VALUES (184, '代码生成', 8, 'com.ruoyi.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '127.0.0.1', '内网IP', '{\"tables\":\"book\"}', NULL, 0, NULL, '2024-10-29 12:00:58', 213);
+INSERT INTO `sys_oper_log` VALUES (185, '代码生成', 8, 'com.ruoyi.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '127.0.0.1', '内网IP', '{\"tables\":\"book_review\"}', NULL, 0, NULL, '2024-10-29 12:01:31', 54);
+INSERT INTO `sys_oper_log` VALUES (186, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":2,\"params\":{},\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:50:18', 173);
+INSERT INTO `sys_oper_log` VALUES (187, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":3,\"params\":{},\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:50:55', 6);
+INSERT INTO `sys_oper_log` VALUES (188, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":4,\"params\":{},\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:51:38', 7);
+INSERT INTO `sys_oper_log` VALUES (189, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":5,\"params\":{},\"review\":\"123\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:52:12', 12);
+INSERT INTO `sys_oper_log` VALUES (190, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":6,\"params\":{},\"review\":\"无聊\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:52:28', 7);
+INSERT INTO `sys_oper_log` VALUES (191, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":7,\"params\":{},\"review\":\"真好看\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:53:31', 7);
+INSERT INTO `sys_oper_log` VALUES (192, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":8,\"params\":{},\"review\":\"666\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:54:26', 8);
+INSERT INTO `sys_oper_log` VALUES (193, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":9,\"params\":{},\"review\":\"666\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:55:40', 8);
+INSERT INTO `sys_oper_log` VALUES (194, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":10,\"params\":{},\"review\":\"666\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 12:59:57', 7);
+INSERT INTO `sys_oper_log` VALUES (195, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":11,\"params\":{},\"review\":\"777\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:00:43', 8);
+INSERT INTO `sys_oper_log` VALUES (196, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'admin', '研发部门', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":3,\"id\":12,\"params\":{},\"review\":\"666\",\"userId\":1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:01:17', 6);
+INSERT INTO `sys_oper_log` VALUES (197, '代码生成', 6, 'com.ruoyi.generator.controller.GenController.importTableSave()', 'POST', 1, 'admin', '研发部门', '/tool/gen/importTable', '127.0.0.1', '内网IP', '{\"tables\":\"order\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:20:42', 75);
+INSERT INTO `sys_oper_log` VALUES (198, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.editSave()', 'PUT', 1, 'admin', '研发部门', '/tool/gen', '127.0.0.1', '内网IP', '{\"businessName\":\"order\",\"className\":\"Order\",\"columns\":[{\"capJavaField\":\"Id\",\"columnComment\":\"订单id\",\"columnId\":18,\"columnName\":\"id\",\"columnType\":\"int\",\"createBy\":\"admin\",\"createTime\":\"2024-10-29 13:20:42\",\"dictType\":\"\",\"edit\":false,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isPk\":\"1\",\"isRequired\":\"0\",\"javaField\":\"id\",\"javaType\":\"Long\",\"list\":false,\"params\":{},\"pk\":true,\"query\":false,\"queryType\":\"EQ\",\"required\":false,\"sort\":1,\"superColumn\":false,\"tableId\":3,\"updateBy\":\"\",\"usableColumn\":false},{\"capJavaField\":\"UserId\",\"columnComment\":\"用户id\",\"columnId\":19,\"columnName\":\"user_id\",\"columnType\":\"int\",\"createBy\":\"admin\",\"createTime\":\"2024-10-29 13:20:42\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"userId\",\"javaType\":\"Long\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"EQ\",\"required\":false,\"sort\":2,\"superColumn\":false,\"tableId\":3,\"updateBy\":\"\",\"usableColumn\":false},{\"capJavaField\":\"TotalPrice\",\"columnComment\":\"总价格\",\"columnId\":20,\"columnName\":\"total_price\",\"columnType\":\"int\",\"createBy\":\"admin\",\"createTime\":\"2024-10-29 13:20:42\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"input\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"totalPrice\",\"javaType\":\"Long\",\"list\":true,\"params\":{},\"pk\":false,\"query\":true,\"queryType\":\"EQ\",\"required\":false,\"sort\":3,\"superColumn\":false,\"tableId\":3,\"updateBy\":\"\",\"usableColumn\":false},{\"capJavaField\":\"DeliveryDate\",\"columnComment\":\"用户希望的送货时间\",\"columnId\":21,\"columnName\":\"delivery_date\",\"columnType\":\"datetime\",\"createBy\":\"admin\",\"createTime\":\"2024-10-29 13:20:42\",\"dictType\":\"\",\"edit\":true,\"htmlType\":\"datetime\",\"increment\":false,\"insert\":true,\"isEdit\":\"1\",\"isIncrement\":\"0\",\"isInsert\":\"1\",\"isList\":\"1\",\"isPk\":\"0\",\"isQuery\":\"1\",\"isRequired\":\"0\",\"javaField\":\"deliveryD', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:22:12', 57);
+INSERT INTO `sys_oper_log` VALUES (199, '代码生成', 8, 'com.ruoyi.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', '研发部门', '/tool/gen/batchGenCode', '127.0.0.1', '内网IP', '{\"tables\":\"order\"}', NULL, 0, NULL, '2024-10-29 13:22:15', 264);
+INSERT INTO `sys_oper_log` VALUES (200, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"system/review/index\",\"createTime\":\"2024-10-29 12:02:10\",\"icon\":\"#\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2007,\"menuName\":\"图书评论管理\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":1,\"path\":\"review\",\"perms\":\"system:review:list\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"1\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:24:21', 47);
+INSERT INTO `sys_oper_log` VALUES (201, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"system/order/index\",\"createTime\":\"2024-10-29 13:22:57\",\"icon\":\"theme\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2013,\"menuName\":\"订单信息\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":1,\"path\":\"order\",\"perms\":\"system:order:list\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:35:25', 43);
+INSERT INTO `sys_oper_log` VALUES (202, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/role', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2024-10-28 20:00:46\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"flag\":false,\"menuCheckStrictly\":true,\"menuIds\":[1,2013,2014,2015,2016,2017,2018],\"params\":{},\"remark\":\"普通角色\",\"roleId\":2,\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"roleSort\":2,\"status\":\"0\",\"updateBy\":\"admin\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:36:34', 50);
+INSERT INTO `sys_oper_log` VALUES (203, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/role', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2024-10-28 20:00:46\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"flag\":false,\"menuCheckStrictly\":true,\"menuIds\":[1,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018],\"params\":{},\"remark\":\"普通角色\",\"roleId\":2,\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"roleSort\":2,\"status\":\"0\",\"updateBy\":\"admin\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:38:23', 25);
+INSERT INTO `sys_oper_log` VALUES (204, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/role', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2024-10-28 20:00:46\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"flag\":false,\"menuCheckStrictly\":true,\"menuIds\":[1,2001,2002,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018],\"params\":{},\"remark\":\"普通角色\",\"roleId\":2,\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"roleSort\":2,\"status\":\"0\",\"updateBy\":\"admin\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:39:39', 44);
+INSERT INTO `sys_oper_log` VALUES (205, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'common', '若依科技', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":13,\"params\":{},\"review\":\"123\",\"userId\":100}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 13:40:18', 13);
+INSERT INTO `sys_oper_log` VALUES (206, '图书评论管理', 1, 'com.ruoyi.web.controller.system.BookReviewController.add()', 'POST', 1, 'common', '若依科技', '/system/review', '127.0.0.1', '内网IP', '{\"bookId\":1,\"id\":14,\"params\":{},\"review\":\"66\",\"userId\":100}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 14:01:46', 22);
+INSERT INTO `sys_oper_log` VALUES (207, '订单信息', 1, 'com.ruoyi.web.controller.system.OrderController.add()', 'POST', 1, 'common', '若依科技', '/system/order', '127.0.0.1', '内网IP', '{\"items\":\"[{\\\"id\\\":3,\\\"name\\\":\\\"springboot\\\",\\\"price\\\":333,\\\"quantity\\\":1},{\\\"id\\\":1,\\\"name\\\":\\\"java\\\",\\\"price\\\":111,\\\"quantity\\\":3}]\",\"orderStatus\":0,\"params\":{},\"totalPrice\":666,\"userId\":100}', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'order\n         ( user_id,\n            total_price,\n            \n            orde\' at line 1\r\n### The error may exist in file [E:\\RuoYi-Vue\\ruoyi-system\\target\\classes\\mapper\\system\\OrderMapper.xml]\r\n### The error may involve com.ruoyi.system.mapper.OrderMapper.insertOrder-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into order          ( user_id,             total_price,                          order_status,             items )           values ( ?,             ?,                          ?,             ? )\r\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'order\n         ( user_id,\n            total_price,\n            \n            orde\' at line 1\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'order\n         ( user_id,\n            total_price,\n            \n            orde\' at line 1', '2024-10-29 14:05:16', 103);
+INSERT INTO `sys_oper_log` VALUES (208, '订单信息', 1, 'com.ruoyi.web.controller.system.OrderController.add()', 'POST', 1, 'common', '若依科技', '/system/order', '127.0.0.1', '内网IP', '{\"deliveryDate\":\"2024-10-09\",\"items\":\"[{\\\"id\\\":3,\\\"name\\\":\\\"springboot\\\",\\\"price\\\":333,\\\"quantity\\\":1},{\\\"id\\\":1,\\\"name\\\":\\\"java\\\",\\\"price\\\":111,\\\"quantity\\\":3}]\",\"orderStatus\":0,\"params\":{},\"totalPrice\":666,\"userId\":100}', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'order\n         ( user_id,\n            total_price,\n            delivery_date,\n  \' at line 1\r\n### The error may exist in file [E:\\RuoYi-Vue\\ruoyi-system\\target\\classes\\mapper\\system\\OrderMapper.xml]\r\n### The error may involve com.ruoyi.system.mapper.OrderMapper.insertOrder-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into order          ( user_id,             total_price,             delivery_date,             order_status,             items )           values ( ?,             ?,             ?,             ?,             ? )\r\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'order\n         ( user_id,\n            total_price,\n            delivery_date,\n  \' at line 1\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'order\n         ( user_id,\n            total_price,\n            delivery_date,\n  \' at line 1', '2024-10-29 14:05:27', 8);
+INSERT INTO `sys_oper_log` VALUES (209, '订单信息', 1, 'com.ruoyi.web.controller.system.OrderController.add()', 'POST', 1, 'common', '若依科技', '/system/order', '127.0.0.1', '内网IP', '{\"deliveryDate\":\"2024-10-09\",\"items\":\"[{\\\"id\\\":3,\\\"name\\\":\\\"springboot\\\",\\\"price\\\":333,\\\"quantity\\\":1},{\\\"id\\\":1,\\\"name\\\":\\\"java\\\",\\\"price\\\":111,\\\"quantity\\\":3}]\",\"orderStatus\":0,\"params\":{},\"totalPrice\":666,\"userId\":100}', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLException: Field \'id\' doesn\'t have a default value\r\n### The error may exist in file [E:\\RuoYi-Vue\\ruoyi-system\\target\\classes\\mapper\\system\\OrderMapper.xml]\r\n### The error may involve com.ruoyi.system.mapper.OrderMapper.insertOrder-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into `order`          ( user_id,             total_price,             delivery_date,             order_status,             items )           values ( ?,             ?,             ?,             ?,             ? )\r\n### Cause: java.sql.SQLException: Field \'id\' doesn\'t have a default value\n; Field \'id\' doesn\'t have a default value; nested exception is java.sql.SQLException: Field \'id\' doesn\'t have a default value', '2024-10-29 14:07:17', 278);
+INSERT INTO `sys_oper_log` VALUES (210, '订单信息', 1, 'com.ruoyi.web.controller.system.OrderController.add()', 'POST', 1, 'common', '若依科技', '/system/order', '127.0.0.1', '内网IP', '{\"deliveryDate\":\"2024-10-09\",\"items\":\"[{\\\"id\\\":3,\\\"name\\\":\\\"springboot\\\",\\\"price\\\":333,\\\"quantity\\\":1},{\\\"id\\\":1,\\\"name\\\":\\\"java\\\",\\\"price\\\":111,\\\"quantity\\\":3}]\",\"orderStatus\":0,\"params\":{},\"totalPrice\":666,\"userId\":100}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 14:07:34', 10);
+INSERT INTO `sys_oper_log` VALUES (211, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/role', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2024-10-28 20:00:46\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"flag\":false,\"menuCheckStrictly\":true,\"menuIds\":[1,2007,2008,2009,2013,2014,2015,2016,2017,2018],\"params\":{},\"remark\":\"普通角色\",\"roleId\":2,\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"roleSort\":2,\"status\":\"0\",\"updateBy\":\"admin\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2024-10-29 14:08:49', 47);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -846,7 +1020,7 @@ CREATE TABLE `sys_role`  (
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 1, '1', 1, 1, '0', '0', 'admin', '2024-10-28 20:00:46', '', NULL, '超级管理员');
-INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', 1, 1, '0', '0', 'admin', '2024-10-28 20:00:46', '', NULL, '普通角色');
+INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', 1, 1, '0', '0', 'admin', '2024-10-28 20:00:46', 'admin', '2024-10-29 14:08:49', '普通角色');
 
 -- ----------------------------
 -- Table structure for sys_role_dept
@@ -879,90 +1053,15 @@ CREATE TABLE `sys_role_menu`  (
 -- Records of sys_role_menu
 -- ----------------------------
 INSERT INTO `sys_role_menu` VALUES (2, 1);
-INSERT INTO `sys_role_menu` VALUES (2, 2);
-INSERT INTO `sys_role_menu` VALUES (2, 3);
-INSERT INTO `sys_role_menu` VALUES (2, 4);
-INSERT INTO `sys_role_menu` VALUES (2, 100);
-INSERT INTO `sys_role_menu` VALUES (2, 101);
-INSERT INTO `sys_role_menu` VALUES (2, 102);
-INSERT INTO `sys_role_menu` VALUES (2, 103);
-INSERT INTO `sys_role_menu` VALUES (2, 104);
-INSERT INTO `sys_role_menu` VALUES (2, 105);
-INSERT INTO `sys_role_menu` VALUES (2, 106);
-INSERT INTO `sys_role_menu` VALUES (2, 107);
-INSERT INTO `sys_role_menu` VALUES (2, 108);
-INSERT INTO `sys_role_menu` VALUES (2, 109);
-INSERT INTO `sys_role_menu` VALUES (2, 110);
-INSERT INTO `sys_role_menu` VALUES (2, 111);
-INSERT INTO `sys_role_menu` VALUES (2, 112);
-INSERT INTO `sys_role_menu` VALUES (2, 113);
-INSERT INTO `sys_role_menu` VALUES (2, 114);
-INSERT INTO `sys_role_menu` VALUES (2, 115);
-INSERT INTO `sys_role_menu` VALUES (2, 116);
-INSERT INTO `sys_role_menu` VALUES (2, 117);
-INSERT INTO `sys_role_menu` VALUES (2, 500);
-INSERT INTO `sys_role_menu` VALUES (2, 501);
-INSERT INTO `sys_role_menu` VALUES (2, 1000);
-INSERT INTO `sys_role_menu` VALUES (2, 1001);
-INSERT INTO `sys_role_menu` VALUES (2, 1002);
-INSERT INTO `sys_role_menu` VALUES (2, 1003);
-INSERT INTO `sys_role_menu` VALUES (2, 1004);
-INSERT INTO `sys_role_menu` VALUES (2, 1005);
-INSERT INTO `sys_role_menu` VALUES (2, 1006);
-INSERT INTO `sys_role_menu` VALUES (2, 1007);
-INSERT INTO `sys_role_menu` VALUES (2, 1008);
-INSERT INTO `sys_role_menu` VALUES (2, 1009);
-INSERT INTO `sys_role_menu` VALUES (2, 1010);
-INSERT INTO `sys_role_menu` VALUES (2, 1011);
-INSERT INTO `sys_role_menu` VALUES (2, 1012);
-INSERT INTO `sys_role_menu` VALUES (2, 1013);
-INSERT INTO `sys_role_menu` VALUES (2, 1014);
-INSERT INTO `sys_role_menu` VALUES (2, 1015);
-INSERT INTO `sys_role_menu` VALUES (2, 1016);
-INSERT INTO `sys_role_menu` VALUES (2, 1017);
-INSERT INTO `sys_role_menu` VALUES (2, 1018);
-INSERT INTO `sys_role_menu` VALUES (2, 1019);
-INSERT INTO `sys_role_menu` VALUES (2, 1020);
-INSERT INTO `sys_role_menu` VALUES (2, 1021);
-INSERT INTO `sys_role_menu` VALUES (2, 1022);
-INSERT INTO `sys_role_menu` VALUES (2, 1023);
-INSERT INTO `sys_role_menu` VALUES (2, 1024);
-INSERT INTO `sys_role_menu` VALUES (2, 1025);
-INSERT INTO `sys_role_menu` VALUES (2, 1026);
-INSERT INTO `sys_role_menu` VALUES (2, 1027);
-INSERT INTO `sys_role_menu` VALUES (2, 1028);
-INSERT INTO `sys_role_menu` VALUES (2, 1029);
-INSERT INTO `sys_role_menu` VALUES (2, 1030);
-INSERT INTO `sys_role_menu` VALUES (2, 1031);
-INSERT INTO `sys_role_menu` VALUES (2, 1032);
-INSERT INTO `sys_role_menu` VALUES (2, 1033);
-INSERT INTO `sys_role_menu` VALUES (2, 1034);
-INSERT INTO `sys_role_menu` VALUES (2, 1035);
-INSERT INTO `sys_role_menu` VALUES (2, 1036);
-INSERT INTO `sys_role_menu` VALUES (2, 1037);
-INSERT INTO `sys_role_menu` VALUES (2, 1038);
-INSERT INTO `sys_role_menu` VALUES (2, 1039);
-INSERT INTO `sys_role_menu` VALUES (2, 1040);
-INSERT INTO `sys_role_menu` VALUES (2, 1041);
-INSERT INTO `sys_role_menu` VALUES (2, 1042);
-INSERT INTO `sys_role_menu` VALUES (2, 1043);
-INSERT INTO `sys_role_menu` VALUES (2, 1044);
-INSERT INTO `sys_role_menu` VALUES (2, 1045);
-INSERT INTO `sys_role_menu` VALUES (2, 1046);
-INSERT INTO `sys_role_menu` VALUES (2, 1047);
-INSERT INTO `sys_role_menu` VALUES (2, 1048);
-INSERT INTO `sys_role_menu` VALUES (2, 1049);
-INSERT INTO `sys_role_menu` VALUES (2, 1050);
-INSERT INTO `sys_role_menu` VALUES (2, 1051);
-INSERT INTO `sys_role_menu` VALUES (2, 1052);
-INSERT INTO `sys_role_menu` VALUES (2, 1053);
-INSERT INTO `sys_role_menu` VALUES (2, 1054);
-INSERT INTO `sys_role_menu` VALUES (2, 1055);
-INSERT INTO `sys_role_menu` VALUES (2, 1056);
-INSERT INTO `sys_role_menu` VALUES (2, 1057);
-INSERT INTO `sys_role_menu` VALUES (2, 1058);
-INSERT INTO `sys_role_menu` VALUES (2, 1059);
-INSERT INTO `sys_role_menu` VALUES (2, 1060);
+INSERT INTO `sys_role_menu` VALUES (2, 2007);
+INSERT INTO `sys_role_menu` VALUES (2, 2008);
+INSERT INTO `sys_role_menu` VALUES (2, 2009);
+INSERT INTO `sys_role_menu` VALUES (2, 2013);
+INSERT INTO `sys_role_menu` VALUES (2, 2014);
+INSERT INTO `sys_role_menu` VALUES (2, 2015);
+INSERT INTO `sys_role_menu` VALUES (2, 2016);
+INSERT INTO `sys_role_menu` VALUES (2, 2017);
+INSERT INTO `sys_role_menu` VALUES (2, 2018);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -989,14 +1088,15 @@ CREATE TABLE `sys_user`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-10-28 22:03:40', 'admin', '2024-10-28 20:00:46', '', '2024-10-28 22:04:12', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-10-29 14:10:29', 'admin', '2024-10-28 20:00:46', '', '2024-10-29 14:11:03', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-10-28 20:00:46', 'admin', '2024-10-28 20:00:46', '', NULL, '测试员');
-INSERT INTO `sys_user` VALUES (100, 100, 'common', 'common', '00', '21111@qq.com', '18200000000', '0', '', '$2a$10$Re69CF6omPMkCjkCtl8ea.nOgt4vLLBXGmstewviMlNEJ28JbAmES', '0', '0', '127.0.0.1', '2024-10-28 22:03:17', 'admin', '2024-10-28 22:03:08', '', '2024-10-28 22:03:49', NULL);
+INSERT INTO `sys_user` VALUES (100, 100, 'common', 'common', '00', '21111@qq.com', '18200000000', '0', '', '$2a$10$Re69CF6omPMkCjkCtl8ea.nOgt4vLLBXGmstewviMlNEJ28JbAmES', '0', '0', '127.0.0.1', '2024-10-29 14:01:01', 'admin', '2024-10-28 22:03:08', '', '2024-10-29 14:01:35', NULL);
+INSERT INTO `sys_user` VALUES (101, NULL, '测试', 'java', '00', '21@qq.com', '19211111111', '0', '', '$2a$10$L8SCuiVh6toB9HX/wRrAlu.YVOxWN55LVelY3v6YF2Jbg.EzlO5Ly', '0', '0', '', NULL, 'admin', '2024-10-29 10:17:41', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
@@ -1031,5 +1131,6 @@ CREATE TABLE `sys_user_role`  (
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
 INSERT INTO `sys_user_role` VALUES (100, 2);
+INSERT INTO `sys_user_role` VALUES (101, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;

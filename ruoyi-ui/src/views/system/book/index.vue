@@ -377,12 +377,17 @@ export default {
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset();
-        const id = row.id || this.ids
+        const id = row.id || this.ids;
         getBook(id).then(response => {
           this.form = response.data;
-          this.form.status = this.form.status.split(",");
+
+          // 将 status 转为字符串，然后进行 split
+          this.form.status = String(this.form.status).split(",");
+
           this.open = true;
           this.title = "修改图书管理";
+        }).catch(error => {
+          console.error("Error fetching book data:", error);
         });
       },
       /** 提交按钮 */

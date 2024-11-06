@@ -1,5 +1,9 @@
 package com.ruoyi.framework.web.service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -63,20 +67,48 @@ public class TokenService
     {
         // 获取请求携带的令牌
         String token = getToken(request);
+
+        // 如果令牌不为空，进行验证
         if (StringUtils.isNotEmpty(token))
         {
             try
             {
-                Claims claims = parseToken(token);
-                // 解析对应的权限以及用户信息
-                String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
-                String userKey = getTokenKey(uuid);
-                LoginUser user = redisCache.getCacheObject(userKey);
-                return user;
+                // 创建 URL 对象
+                URL url = new URL("http://124.70.86.218:8081/GetToken");
+
+                // 打开连接
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");  // 设置请求方法为 GET
+                connection.setConnectTimeout(5000);  // 设置连接超时时间（5秒）
+                connection.setReadTimeout(5000);     // 设置读取超时时间（5秒）
+
+                // 获取响应内容
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                // 逐行读取返回内容
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // 解析返回的布尔值（假设返回的是 "true" 或 "false" 字符串）
+                if (Boolean.parseBoolean(response.toString())) {
+                    // 如果令牌验证成功，继续解析令牌并获取用户信息
+                    Claims claims = parseToken(token);
+                    String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+                    String userKey = getTokenKey(uuid);
+                    LoginUser user = redisCache.getCacheObject(userKey);
+                    return user;
+                } else {
+                    // 如果令牌验证失败，返回 null
+                    return null;
+                }
             }
             catch (Exception e)
             {
-                log.error("获取用户信息异常'{}'", e.getMessage());
+                log.error("获取用户信息异常: '{}'", e.getMessage());
             }
         }
         return null;

@@ -1,16 +1,30 @@
 <template>
   <div class="book-page">
+    <!-- 导航按钮 -->
     <el-button class="home-button" type="primary" @click="goToHome">后台管理</el-button>
     <el-button class="cart-button" type="primary" @click="showCart">查看购物车 ({{ cartItems.length }})</el-button>
+    <!-- 分类按钮 -->
+    <el-row :gutter="20" class="category-buttons">
+      <el-col v-for="(books, category) in categorizedBooks" :key="category" :span="4">
+        <el-button
+          :class="['category-button', { active: selectedCategory === category }]"
+          type="default"
+          @click="selectCategory(category)"
+        >
+          {{ category }}
+        </el-button>
+      </el-col>
+    </el-row>
 
-    <el-row v-for="(books, category) in categorizedBooks" :key="category" gutter="20">
+    <!-- 当前分类的书籍展示 -->
+    <el-row v-for="(books, category) in categorizedBooks" v-if="selectedCategory === category" :key="category" gutter="20">
       <el-col :span="24">
         <h2 class="category-title">{{ category }}</h2>
       </el-col>
       <el-col v-for="book in books" :key="book.id" :span="8">
         <el-card class="book-card animated-card" :body-style="{ padding: '20px' }">
           <div class="image-container">
-            <image-preview :src="book.image" :width="300" :height="300" />
+            <image-preview :src="book.image" :width="200" :height="200" />
           </div>
           <div class="book-info">
             <h3 class="book-title">{{ book.name }}</h3>
@@ -80,11 +94,13 @@
 import { listBook } from "@/api/system/book";
 import { listReview, addReview } from "@/api/review";
 import { addOrder } from "@/api/system/order";
+
 export default {
   data() {
     return {
       bookList: [],
       categorizedBooks: {},
+      selectedCategory: '', // 当前选中的分类
       cartItems: [], // 购物车中的书籍列表
       deliveryDate: '', // 用户希望的送货时间
       cartVisible: false // 控制购物车对话框的显示
@@ -149,6 +165,12 @@ export default {
         acc[category].push(book);
         return acc;
       }, {});
+      // 默认显示第一个分类
+      this.selectedCategory = Object.keys(this.categorizedBooks)[0] || '';
+    },
+    // 切换分类
+    selectCategory(category) {
+      this.selectedCategory = category;
     },
     // 提交书评
     submitReview(book) {
@@ -202,42 +224,45 @@ export default {
     },
 
     // 结账处理
-    // 结账处理
     checkout() {
-      // 使用 deliveryDate 作为送货时间
       const orderData = {
-        items: JSON.stringify(this.cartItems), // 将 items 转为 JSON 字符串
+        items: JSON
+          .stringify(this.cartItems),
         deliveryDate: this.deliveryDate,
         totalPrice: this.cartTotal,
       };
 
-      // 在这里调用提交订单的 API，例如
       addOrder(orderData)
         .then(() => {
           this.$message.success("订单提交成功");
-          // 清空购物车和送货时间
           this.cartItems = [];
           this.deliveryDate = '';
-          this.cartVisible = false; // 关闭购物车对话框
+          this.cartVisible = false;
         })
         .catch(error => {
           console.error("订单提交失败：", error);
         });
     }
-
   }
 };
 </script>
 
-
 <style scoped>
-.home-button {
+.home-button, .cart-button {
   margin-bottom: 20px;
-  position: fixed; /* 可以使用 fixed 或绝对定位 */
+  position: fixed;
   top: 10px;
-  left: 20px; /* 调整位置 */
-  z-index: 10;
+  z-index: 1000;
 }
+
+.home-button {
+  left: 20px;
+}
+
+.cart-button {
+  right: 20px;
+}
+
 .book-page {
   padding: 20px;
   background: linear-gradient(135deg, #f3f4f6, #e9eff5);
@@ -252,50 +277,53 @@ export default {
   text-shadow: 1px 1px 2px #ccc;
 }
 
+.category-buttons {
+  display: flex;
+  flex-wrap: nowrap;  /* 防止按钮换行 */
+  justify-content: flex-start; /* 从左到右排列 */
+  margin-bottom: 20px;
+}
+
+.category-button {
+  flex: 1 1 auto; /* 使按钮宽度自适应并且填满空白区域 */
+  margin: 80px 0 0 0; /* 清除默认的按钮间隙 */
+  border-radius: 5px;
+  padding: 10px 30px; /* 增加按钮的内边距，增加点击区域 */
+  font-size: 1.1em;
+  color: #333;
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.category-button.active {
+  background-color: #48c86c; /* 激活状态的背景色 */
+  color: white;
+  border-color: #48c86c; /* 激活状态的边框颜色 */
+}
+
 .category-title {
   margin: 20px 0;
   font-size: 1.8em;
   color: #666;
   border-bottom: 2px solid #ddd;
   padding-bottom: 10px;
-  transition: color 0.3s ease;
-}
-
-.category-title:hover {
-  color: #333;
-}
-
-.animated-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.animated-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .image-container {
-  overflow: hidden;
-  border-radius: 10px;
+  text-align: center;
+  padding: 10px;
 }
 
 .book-info {
   margin-top: 15px;
   text-align: left;
-  transition: color 0.2s ease;
 }
 
 .book-title {
   font-size: 1.6em;
   margin-bottom: 10px;
   color: #333;
-  transition: color 0.2s;
-}
-
-.book-title:hover {
-  color: #48c86c;
 }
 
 .highlight-price {
@@ -325,71 +353,50 @@ export default {
   background: linear-gradient(to right, #48c86c, #34b7a7);
   color: #fff;
   font-weight: bold;
-  transition: all 0.3s ease;
   border-radius: 5px;
-}
-
-.animated-button:hover {
-  transform: scale(1.1);
-  background: linear-gradient(to right, #34b7a7, #48c86c);
-}
-
-.animated-review {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease;
-}
-
-.review-item {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  animation: slideIn 0.5s ease forwards;
-}
-
-.cart {
-  margin-top: 50px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-}
-
-.cart-summary {
-  margin-top: 20px;
-  text-align: right;
-}
-
-.cart-summary p {
-  font-size: 1.3em;
-  color: #333;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-.book-page {
-  padding: 20px;
-  background: linear-gradient(135deg, #f3f4f6, #e9eff5);
-  font-family: Arial, sans-serif;
-}
-
-.cart-button {
-  margin-bottom: 20px;
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 10;
 }
 
 .cart-summary {
   margin-top: 20px;
   font-weight: bold;
+  text-align: right;
+}
+
+/* 对话框样式 */
+.el-dialog {
+  max-width: 80%;
+}
+
+.el-dialog .el-table {
+  margin-top: 20px;
+}
+
+.el-dialog .dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .category-buttons {
+    flex-wrap: wrap; /* 在小屏幕上允许换行 */
+  }
+
+  .category-button {
+    flex: 0 1 45%; /* 小屏幕上按钮占据一半宽度 */
+    margin: 5px;
+  }
+
+  .home-button, .cart-button {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+  }
+
+  .book-card {
+    margin-bottom: 20px;
+  }
 }
 </style>
